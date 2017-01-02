@@ -37,7 +37,7 @@ it ip `192.168.55.55` and install Docker. It will take some time for first time 
 	- http://nodeWelcomeApp.local - Node.js app (Reverse-proxied by Nginx)
 	
 - Add more PHP projects to Nginx or Apache config folders or Node apps 
-to `docker-compose.json` file or customize Node image.
+to `docker-compose.yml` file or customize Node image.
 
 To check containers - login to virtual machine - run `vagrant ssh` from project dir, then run `docker ps`.
 To see logs run `dicker logs -f <container-name>`

@@ -31,7 +31,7 @@ it ip `192.168.55.55` and install Docker. It will take some time for first time 
 192.168.55.55 nodeWelcomeApp.local
 ```
 
-- Open one of the URLs
+- Open one of the URLs (your browser *may* need restart)
 	- http://php7nginxHost.local - PHP7 and Nginx 
 	- http://php54apacheHost.local - Apache + PHP 5.4 (Reverse-proxied by Nginx)
 	- http://nodeWelcomeApp.local - Node.js app (Reverse-proxied by Nginx)

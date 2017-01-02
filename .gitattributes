@@ -4,3 +4,6 @@
 *.gif binary
 *.jpg binary
 *.jpeg binary
+*.ico binary
+*.bin binary
+*.dll binary

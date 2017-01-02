@@ -40,7 +40,7 @@ it ip `192.168.55.55` and install Docker. It will take some time for first time 
 to `docker-compose.yml` file or customize Node image.
 
 To check containers - login to virtual machine - run `vagrant ssh` from project dir, then run `docker ps`.
-To see logs run `dicker logs -f <container-name>`
+To see logs run `docker logs -f <container-name>`
 
 ## Notes
 

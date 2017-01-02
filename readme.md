@@ -22,7 +22,7 @@ virtual machine, in this way it will not interfere with your host machine setup.
 
 - Checkout repository or download and unpack ZIP archive
 - Run `vagrant up` from project directory. Vagrant will create a virtual machine, assign 
-it ip `192.168.55.55` and install Docker. It will take some time for first time since Docker needs to download base images and build custom ones)
+it ip `192.168.55.55` and install Docker. This step may take some time for first time (depending on your host machine performance and network bandwidth) since Docker needs to download base images and build custom ones)
 - Meanwhile you need to add test domains to your [hosts file](https://www.google.com/search?q=what%20is%20hosts%20file)
 
 ```

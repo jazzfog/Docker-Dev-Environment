@@ -1,0 +1,125 @@
+version: '2'
+
+services:
+
+  # Nginx ---------------------------------------------------------------------------------
+
+  nginx:
+    image: fog/nginx
+    build:
+      context: ./images/nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./configs/nginx:/etc/nginx/conf.d
+      - /www:/www/
+    links:
+      - php
+      - php54apache
+
+  # PHP -----------------------------------------------------------------------------------
+
+  php:
+    extends:
+      file: common.yml
+      service: php
+    links:
+      - mariadb
+      - redis
+
+  # Node.js -------------------------------------------------------------------------------
+
+  node:
+    extends:
+      file: common.yml
+      service: node
+    volumes:
+      - ./www/node_app:/www
+    working_dir: /www
+
+  # ---------------------------------------------------------------------------------------
+
+  php54apache:
+    image: fog/php54apache
+    build:
+      context: ./images/php54apache
+    restart: always
+    ports:
+      # Not necessary, just for debug
+      # Mostly should be accessed through Nginx reverse proxy
+      - "8080:80"
+    volumes:
+      - ./www/:/www/
+      - ./configs/dev.env:/etc/env
+      - ./configs/httpd.conf:/etc/apache2/httpd.conf
+      - ./configs/apache:/etc/apache2/sites-enabled
+      - ./configs/php.ini:/etc/php5/apache2/conf.d/my-php.ini
+
+  # MySQL (MariaDB) -----------------------------------------------------------------------
+
+  mariadb:
+    image: fog/mariadb
+    build:
+      context: ./images/mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./configs/my-mariadb.cnf:/my-mariadb-tmp.cnf
+
+      # Will be stored on host Mac or Linux instance (VM docker host)
+      - ~/docker-data/mariadb:/var/lib/mysql
+
+    environment:
+      # Password will be shown in stdout during first run
+      # Login with `root` and that password, change the password right away
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      # Looks like this does not work at the moment
+      #- MYSQL_ONETIME_PASSWORD=yes
+      #- MYSQL_ROOT_PASSWORD=333777
+
+  # Redis ---------------------------------------------------------------------------------
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # MongoDB -------------------------------------------------------------------------------
+
+  mongodb:
+    image: mongo:3
+    restart: always
+    command: mongod --config /mongod.conf
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./configs/mongod.conf:/mongod.conf
+      - ~/data/mongodb:/data/db
+
+    # Auth is enabled:
+    # When container is ready - manually create "userAdminAnyDatabase" user using "Localhost Exception"
+    # https://docs.mongodb.com/manual/tutorial/enable-authentication/
+    # and then real users for databases
+    # https://docs.mongodb.com/manual/tutorial/create-users/
+
+    # TL;DR
+
+    # mongo
+    # use admin
+    # db.createUser({ user: 'admin', pwd: '<password>', roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });
+    #
+    # mongo -u admin -p <password> --authenticationDatabase admin
+    # use <db-name>
+    #
+    # db.createUser({
+    # 	user: "<user-name>",
+    # 	pwd: "<userPassword>",
+    # 	roles: [
+    # 	   { role: "readWrite", db: "<db-name>" }
+    # 	]
+    # });
+
+  # ---------------------------------------------------------------------------------------

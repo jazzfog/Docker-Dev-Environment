@@ -1,0 +1,19 @@
+{
+  "name": "welcome-node-app",
+  "description": "welcome-node-app",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js"
+  },
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "private": true
+  },
+  "readme": "",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

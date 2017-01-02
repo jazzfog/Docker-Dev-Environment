@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  php:
+    image: fog/php
+    build:
+      context: ./images/php
+    restart: always
+    volumes:
+      - /www/:/www/
+      - ./configs/dev.env:/etc/env
+      - ./configs/php.ini:/usr/local/etc/php/php.ini
+      - ./configs/php-cli.ini:/usr/local/etc/php/php-cli.ini
+
+  node:
+    image: fog/node
+    build:
+      context: ./images/node
+    restart: always

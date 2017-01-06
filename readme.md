@@ -44,7 +44,7 @@ To see logs run `docker logs -f <container-name>`
 
 ## Notes
 
-##### MySQL
+#### MySQL
 
 MySQL root password will be shown in stdout during first run. Look for `GENERATED ROOT PASSWORD: .....` 
 If you missed it - just re-create mysql instance: (you may need to find image and container 
@@ -58,7 +58,7 @@ sudo rm -rf ~/docker-data/mariadb
 docker-compose up
 ```
 
-##### MongoDB
+#### MongoDB
 
 Auth is enabled
 
@@ -91,3 +91,17 @@ db.createUser({
 	]
 });
 ```
+
+#### Shared folders speed
+
+If you concerned about shared folders speed (honestly, you should be) use [NFS](https://en.wikipedia.org/wiki/Network_File_System) for sharing your folders.
+
+For example (making default folder available in VM under `/vagrant_nfs`):
+
+    config.vm.network "private_network", type: "dhcp"
+    config.vm.synced_folder ".", "/vagrant_nfs", type: "nfs"
+    
+Someone may say that it will not work on Windows (since [Vagrant official site says so](https://www.vagrantup.com/docs/synced-folders/nfs.html)) but it is not true, it woks with with [winnfsd](https://github.com/winnfsd/vagrant-winnfsd) plugin.
+
+
+

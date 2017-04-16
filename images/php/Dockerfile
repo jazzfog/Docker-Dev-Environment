@@ -1,51 +1,42 @@
 FROM php:7.1-fpm
 MAINTAINER Fog
 
-# Remove image cmd
-# docker stop vagrant_php_1 && docker rm vagrant_php_1 && docker rmi fog/php
-
-COPY ./install_node.sh /
-
+# Install programs
 RUN \
 	apt-get update && \
-	apt-get install -y imagemagick git wget zlib1g-dev && \
+	apt-get install -y imagemagick git wget curl zlib1g-dev && \
 
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install PHP extensions
+RUN \
 	docker-php-ext-install pdo_mysql && \
 	docker-php-ext-install zip && \
-	pecl install redis && docker-php-ext-enable redis && \
+	docker-php-ext-install sockets && \
+	pecl install redis && docker-php-ext-enable redis
 
-	######################################################
-	# Install Composer
-
+# Install Composer
+RUN \
 	wget https://getcomposer.org/installer -O composer-setup.php && \
 	php composer-setup.php --install-dir=/bin --filename=composer && \
 	rm composer-setup.php && \
 	mkdir /var/www/.composer && \
-	chown www-data /var/www/.composer -Rv && \
+	chown www-data /var/www/.composer -Rv
 
-	######################################################
-	# Install Node and NPM
+# Install Node and NPM
+RUN \
+	curl -sL https://deb.nodesource.com/setup_7.x | bash - && \
+	apt-get install -y nodejs
 
-	. /install_node.sh && \
-	mkdir /var/www/.npm && \
-	chown www-data /var/www/.npm -Rv && \
-
-	######################################################
-	# Install Bower
-
+# Install Bower
+RUN \
 	npm install -g bower && \
 	mkdir /var/www/.config && \
 	mkdir /var/www/.cache && \
 	mkdir /var/www/.local && \
 	chown www-data /var/www/.config -Rv && \
 	chown www-data /var/www/.cache -Rv && \
-	chown www-data /var/www/.local -Rv && \
+	chown www-data /var/www/.local -Rv
 
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-ENV NODE_BIN_PATH "/node/bin"
-
-ENV PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$NODE_BIN_PATH"
-
-RUN echo $PATH
+WORKDIR /www

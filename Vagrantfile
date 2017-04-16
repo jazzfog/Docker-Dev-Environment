@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
   config.vm.provider "virtualbox" do |v|
   
     v.name = "Web Dev Server - Docker (GitHub)"
-	v.customize ["modifyvm", :id, "--memory", "2000"]
+	v.customize ["modifyvm", :id, "--memory", "2048"]
 	v.cpus = 2
 
 	# making sure host OS is used as a name server
@@ -29,8 +29,9 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "./", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
   config.vm.synced_folder "./www", "/www", :mount_options => ["dmode=777","fmode=777"]
 
+  # NFS (Network File System) for shared folders
   # Mac OSX and Windows with `winnfsd` plugin (https://github.com/winnfsd/vagrant-winnfsd) can use these folders
-  # Uncomment if you need
+  # Uncomment if NFS is supported on your system:
   # config.vm.synced_folder ".", "/vagrant_nfs", type: "nfs"
   # config.vm.synced_folder "./www", "/www_nfs", type: "nfs"
 

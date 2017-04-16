@@ -5,9 +5,9 @@ services:
   # Nginx ---------------------------------------------------------------------------------
 
   nginx:
+    container_name: nginx
     image: fog/nginx
-    build:
-      context: ./images/nginx
+    build: ./images/nginx
     restart: always
     ports:
       - "80:80"
@@ -21,6 +21,7 @@ services:
   # PHP -----------------------------------------------------------------------------------
 
   php:
+    container_name: php
     extends:
       file: common.yml
       service: php
@@ -31,6 +32,7 @@ services:
   # Node.js -------------------------------------------------------------------------------
 
   node:
+    container_name: node
     extends:
       file: common.yml
       service: node
@@ -41,9 +43,9 @@ services:
   # ---------------------------------------------------------------------------------------
 
   php54apache:
+    container_name: php54
     image: fog/php54apache
-    build:
-      context: ./images/php54apache
+    build: ./images/php54apache
     restart: always
     ports:
       # Not necessary, just for debug
@@ -59,29 +61,24 @@ services:
   # MySQL (MariaDB) -----------------------------------------------------------------------
 
   mariadb:
+    container_name: mariadb
     image: fog/mariadb
-    build:
-      context: ./images/mariadb
+    build: ./images/mariadb
     restart: always
     ports:
       - "3306:3306"
     volumes:
       - ./configs/my-mariadb.cnf:/my-mariadb-tmp.cnf
-
       # Will be stored on host Mac or Linux instance (VM docker host)
       - ~/docker-data/mariadb:/var/lib/mysql
 
     environment:
-      # Password will be shown in stdout during first run
-      # Login with `root` and that password, change the password right away
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      # Looks like this does not work at the moment
-      #- MYSQL_ONETIME_PASSWORD=yes
-      #- MYSQL_ROOT_PASSWORD=333777
+      - MYSQL_ROOT_PASSWORD=12345
 
   # Redis ---------------------------------------------------------------------------------
 
   redis:
+    container_name: redis
     image: redis
     restart: always
     ports:
@@ -90,6 +87,7 @@ services:
   # MongoDB -------------------------------------------------------------------------------
 
   mongodb:
+    container_name: mongodb
     image: mongo:3
     restart: always
     command: mongod --config /mongod.conf
@@ -97,7 +95,7 @@ services:
       - "27017:27017"
     volumes:
       - ./configs/mongod.conf:/mongod.conf
-      - ~/data/mongodb:/data/db
+      - ~/docker-data/mongodb:/data/db
 
     # Auth is enabled:
     # When container is ready - manually create "userAdminAnyDatabase" user using "Localhost Exception"

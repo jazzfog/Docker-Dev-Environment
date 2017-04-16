@@ -31,11 +31,15 @@ it ip `192.168.55.55` and install Docker. This step may take some time for first
 192.168.55.55 nodeWelcomeApp.local
 ```
 
-- Open one of the URLs (you *may* need to restart your browser)
+- Open one of the URLs
 	- http://php7nginxHost.local - PHP7 and Nginx 
 	- http://php54apacheHost.local - Apache + PHP 5.4 (Reverse-proxied by Nginx)
 	- http://nodeWelcomeApp.local - Node.js app (Reverse-proxied by Nginx)
 	
+- Please, note
+	- You *may* need to restart your browser
+	- If you typing in URLs manually, first time a browser may require to type in `http://` explicitly
+
 - Add more PHP projects to Nginx or Apache config folders or Node apps 
 to `docker-compose.yml` file or customize Node image.
 
@@ -46,17 +50,7 @@ To see logs run `docker logs -f <container-name>`
 
 #### MySQL
 
-MySQL root password will be shown in stdout during first run. Look for `GENERATED ROOT PASSWORD: .....` 
-If you missed it - just re-create mysql instance: (you may need to find image and container 
-names with `docker ps -a` and `docker images`)
- 
-```
-docker stop vagrant_mariadb_1
-docker rm vagrant_mariadb_1
-docker rmi fog/mariadb
-sudo rm -rf ~/docker-data/mariadb
-docker-compose up
-```
+MySQL host is `mariadb` (within Docker containers) and root password is `12345` by default, chnage it right away
 
 #### MongoDB
 
@@ -92,6 +86,10 @@ db.createUser({
 });
 ```
 
+#### Data
+
+MySQL and MongoDB data folders are mounted to `~/docker-data/` on a host machine (or VM, in case of Vagrant/VirtualBox).
+
 #### Shared folders speed
 
 If you concerned about shared folders speed (honestly, you should be) use [NFS](https://en.wikipedia.org/wiki/Network_File_System) for sharing your folders.
@@ -101,7 +99,4 @@ For example (making default folder available in VM under `/vagrant_nfs`):
     config.vm.network "private_network", type: "dhcp"
     config.vm.synced_folder ".", "/vagrant_nfs", type: "nfs"
     
-Someone may say that it will not work on Windows (since [Vagrant official site says so](https://www.vagrantup.com/docs/synced-folders/nfs.html)) but it is not true, it woks with with [winnfsd](https://github.com/winnfsd/vagrant-winnfsd) plugin.
-
-
-
+Someone may say that it will not work on Windows (since [Vagrant official site says so](https://www.vagrantup.com/docs/synced-folders/nfs.html)) but it is not true, it woks with [winnfsd](https://github.com/winnfsd/vagrant-winnfsd) plugin.

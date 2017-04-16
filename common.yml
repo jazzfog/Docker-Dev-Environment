@@ -3,8 +3,7 @@ version: '2'
 services:
   php:
     image: fog/php
-    build:
-      context: ./images/php
+    build: ./images/php
     restart: always
     volumes:
       - /www/:/www/
@@ -14,6 +13,5 @@ services:
 
   node:
     image: fog/node
-    build:
-      context: ./images/node
+    build: ./images/node
     restart: always

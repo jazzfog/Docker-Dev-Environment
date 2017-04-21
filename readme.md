@@ -18,6 +18,12 @@ virtual machine, in this way it will not interfere with your host machine setup.
 
 ...or [Docker](https://www.docker.com) on your host machine.
 
+Note: If you using Vagrant, it is recommended to install VirtualBox guest additions plugin:
+
+```
+vagrant plugin install vagrant-vbguest
+```
+
 ## Install and run
 
 - Checkout repository or download and unpack ZIP archive
